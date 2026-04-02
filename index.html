@@ -460,6 +460,15 @@
             { img: "photo11.jpg", date: "Today", caption: "We made it till here, Happy 18th Birthday! ❤️💕" }
         ];
 
+        // 1. PRELOAD IMAGES: This downloads all images in the background immediately
+        // so they are ready instantly when she clicks "Next"
+        window.addEventListener('DOMContentLoaded', () => {
+            timelineData.forEach(item => {
+                const img = new Image();
+                img.src = item.img;
+            });
+        });
+
         let currentIndex = 0;
 
         const screenWelcome = document.getElementById('screen-welcome');
@@ -493,13 +502,23 @@
         function updateSlide() {
             const data = timelineData[currentIndex];
 
+            // Fade out current image
             imgEl.style.opacity = 0;
+
+            // Wait a moment for the fade-out effect, then change the image
             setTimeout(() => {
-                imgEl.src = data.img;
                 dateEl.innerText = data.date;
                 captionEl.innerText = data.caption;
-                imgEl.style.opacity = 1;
-            }, 200);
+
+                // 2. WAIT TO FADE IN: Only show the image ONCE it is fully loaded
+                imgEl.onload = () => {
+                    imgEl.style.opacity = 1;
+                };
+
+                // Changing the src triggers the download/onload event
+                imgEl.src = data.img;
+
+            }, 300);
 
             btnPrev.disabled = currentIndex === 0;
 
@@ -533,18 +552,15 @@
 
         // --- ENVELOPE LOGIC ---
         function openEnvelope() {
-            // Trigger animation
             envWrapper.classList.add('open');
 
-            // Wait 1.6 seconds for the user to watch the animation, then show letter
             setTimeout(() => {
                 envArea.style.display = 'none';
                 fullLetter.style.display = 'block';
 
-                // Slight delay to allow CSS to register 'block' before changing opacity
                 setTimeout(() => {
                     fullLetter.style.opacity = 1;
-                    createHearts(); // Trigger hearts when letter appears
+                    createHearts();
                 }, 50);
             }, 1600);
         }
@@ -554,7 +570,6 @@
 
             document.querySelectorAll('.heart').forEach(heart => heart.remove());
 
-            // Reset Envelope State
             envWrapper.classList.remove('open');
             envArea.style.display = 'flex';
             fullLetter.style.display = 'none';
