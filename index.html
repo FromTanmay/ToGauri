@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 18th Birthday Gauri!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1,
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #d6336c;
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            color: #495057;
+            margin-bottom: 25px;
+        }
+
+        button {
+            background-color: #d6336c;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(214, 51, 108, 0.4);
+        }
+
+        button:hover {
+            background-color: #a61e4d;
+            transform: translateY(-2px);
+        }
+
+        .restart-btn {
+            background-color: transparent;
+            color: #d6336c;
+            border: 2px solid #d6336c;
+            box-shadow: none;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .restart-btn:hover {
+            background-color: #d6336c;
+            color: white;
+        }
+
+        .photo-container {
+            width: 100%;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #timeline-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease;
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: #d6336c;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .timeline-caption {
+            font-size: 1.1rem;
+            color: #495057;
+            margin-bottom: 25px;
+            min-height: 48px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: transparent;
+            color: #d6336c;
+            border: 2px solid #d6336c;
+            box-shadow: none;
+        }
+
+        .nav-btn:hover {
+            background-color: #d6336c;
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: rgba(214, 51, 108, 0.3);
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .dot.active {
+            background-color: #d6336c;
+            transform: scale(1.2);
+        }
+
+        /* --- ENVELOPE ANIMATION STYLES --- */
+        .envelope-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 260px;
+            height: 170px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: translateY(-5px);
+        }
+
+        .env-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #f48fb1;
+            /* Outer envelope color */
+            border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(214, 51, 108, 0.2);
+        }
+
+        .env-paper {
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background-color: #fff;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+            color: #d6336c;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            transition: transform 0.8s ease 0.4s;
+            /* Waits for flap, then slides up */
+            z-index: 1;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .env-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* The folded front triangles of the envelope */
+        .env-front::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            border-left: 130px solid #ec407a;
+            border-top: 85px solid transparent;
+            border-bottom: 85px solid #ec407a;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .env-front::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-right: 130px solid #d81b60;
+            border-top: 85px solid transparent;
+            border-bottom: 85px solid #d81b60;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .env-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 130px solid transparent;
+            border-right: 130px solid transparent;
+            border-top: 95px solid #f06292;
+            /* Top flap color */
+            transform-origin: top;
+            transition: transform 0.6s ease, z-index 0.2s;
+            z-index: 3;
+        }
+
+        .env-seal {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 45px;
+            height: 45px;
+            background-color: #c2185b;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            z-index: 4;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Classes applied via JS when clicked */
+        .envelope-wrapper.open .env-flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope-wrapper.open .env-seal {
+            opacity: 0;
+        }
+
+        .envelope-wrapper.open .env-paper {
+            transform: translateY(-50px);
+            z-index: 3;
+        }
+
+        /* --- FULL LETTER REVEAL --- */
+        #full-letter-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .letter-content {
+            text-align: left;
+            line-height: 1.8;
+            font-size: 1.15rem;
+            max-height: 55vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .heart {
+            position: fixed;
+            color: #ff4b72;
+            animation: floatUp 4s linear forwards;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 30px 20px;
+            }
+
+            .photo-container {
+                height: 250px;
+            }
+
+            .letter-content {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glass-card">
+
+        <div id="screen-welcome" class="screen active">
+            <h1>Happy 18th, Khushi! ❤️</h1>
+            <p class="subtitle">A walk down memory lane.</p>
+            <button onclick="startTimeline()">Start the Journey</button>
+        </div>
+
+        <div id="screen-timeline" class="screen">
+            <div class="photo-container">
+                <img id="timeline-img" src="" alt="Memory">
+            </div>
+            <div class="timeline-date" id="timeline-date">Date Here</div>
+            <div class="timeline-caption" id="timeline-caption">Caption here</div>
+
+            <div class="controls">
+                <button id="btn-prev" class="nav-btn" onclick="prevSlide()">← Back</button>
+                <button id="btn-next" onclick="nextSlide()">Next →</button>
+            </div>
+
+            <div class="dots-container" id="dots-container"></div>
+        </div>
+
+        <div id="screen-letter" class="screen">
+
+            <div class="envelope-area" id="envelope-area">
+                <div class="envelope-wrapper" id="env-wrapper" onclick="openEnvelope()">
+                    <div class="env-back"></div>
+                    <div class="env-paper">For Ganudi</div>
+                    <div class="env-front"></div>
+                    <div class="env-flap"></div>
+                    <div class="env-seal">❤️</div>
+                </div>
+                <p style="color: #d6336c; font-weight: 500; margin-top: 30px; font-size: 1.1rem;">Tap to open your
+                    letter</p>
+            </div>
+
+            <div id="full-letter-container">
+                <h2>To my Gauri,</h2>
+                <div class="letter-content">
+                    <p>Happy 18th Birthday Dear!💞 Walking through these memories reminds me of exactly why you mean so
+                        much to
+                        me 💝💝</p>
+                    <p>Finally this birthday came, the birthday of my most fav person, The birthday closest to my
+                        heart...❤️ Bohot pyaar hai tere pyaar me! Aaj tera special day hai, aur mai soch raha tha ki
+                        mere paas words hi nahi hai ye batane ke liye ki tu mere liye kitni important hain🥹❤️
+                    </p>
+                    <p>Tere pyaar ne mujhe bohot kuch sikhaya hai, pyaar karna sikhaya hai. It teached me how not to
+                        give up 🥹💕. I commit alot mistakes, but u teached me how to forgive, kaise har situation main
+                        positive rehna hai, aur sabse badi baat, tere pyaar ne mujhe unconditionally pyaar karna sikhaya
+                        hai 🫂💝.</p>
+                    <p>Yaad hai tera last birthday kaise bheege the barish main apn 😂❤️ Bohot khushi hui thi. Hope this
+                        birthday is better than the last one too !! We will enjoy this day, Missing u alot right now 🫂
+                    </p>
+                    <p>Bohot se problems hue hai apne ko bhi but i'm proud of you dear. You never left my side. You
+                        were always from my side...😭💓💞</p>
+                    <p>Main bohot pyaar karta hoon terese, aur har din tere saath rehena, meko khushi deta hai 💓🫂.
+                        Tere
+                        saath har moment ek pyaara moment ban jata hai🥹 I can't imagine my life without you 😭❤️</p>
+                    <p>I love you!<br><strong>- Yours and only yours Tanmay</strong></p>
+                </div>
+                <button class="restart-btn" onclick="restartTimeline()">↺ Restart Journey</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const timelineData = [
+            { img: "photo1.jpg", date: "The Beginning", caption: "Where our SAFAR started." },
+            { img: "photo2.jpg", date: "Month Year", caption: "The place where my choices MATTER" },
+            { img: "photo3.jpg", date: "Month Year", caption: "The PERSON closet to HEART matched the vibes" },
+            { img: "photo4.jpg", date: "Month Year", caption: "Happiness of being the first one for HER" },
+            { img: "photo5.jpg", date: "Month Year", caption: "Sharing my CRAZY days with HER" },
+            { img: "photo6.jpg", date: "Month Year", caption: "Some moments CREATED unexpected MEMORIES" },
+            { img: "photo7.jpg", date: "Month Year", caption: "The realisation of HER and ME vs the problem" },
+            { img: "photo8.jpg", date: "Month Year", caption: "Kuch baat toh hai iss VIBE main" },
+            { img: "photo9.jpg", date: "Month Year", caption: "Dekhoo n guyzzz! Hai n cute 🤭" },
+            { img: "photo10.jpg", date: "Month Year", caption: "You made my life DEAR!❤️" },
+            { img: "photo11.jpg", date: "Today", caption: "We made it till here, Happy 18th Birthday! ❤️💕" }
+        ];
+
+        let currentIndex = 0;
+
+        const screenWelcome = document.getElementById('screen-welcome');
+        const screenTimeline = document.getElementById('screen-timeline');
+        const screenLetter = document.getElementById('screen-letter');
+
+        const imgEl = document.getElementById('timeline-img');
+        const dateEl = document.getElementById('timeline-date');
+        const captionEl = document.getElementById('timeline-caption');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const dotsContainer = document.getElementById('dots-container');
+
+        const envWrapper = document.getElementById('env-wrapper');
+        const envArea = document.getElementById('envelope-area');
+        const fullLetter = document.getElementById('full-letter-container');
+
+        timelineData.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        });
+
+        function startTimeline() {
+            screenWelcome.classList.remove('active');
+            screenTimeline.classList.add('active');
+            updateSlide();
+        }
+
+        function updateSlide() {
+            const data = timelineData[currentIndex];
+
+            imgEl.style.opacity = 0;
+            setTimeout(() => {
+                imgEl.src = data.img;
+                dateEl.innerText = data.date;
+                captionEl.innerText = data.caption;
+                imgEl.style.opacity = 1;
+            }, 200);
+
+            btnPrev.disabled = currentIndex === 0;
+
+            if (currentIndex === timelineData.length - 1) {
+                btnNext.innerText = "Finish Journey";
+            } else {
+                btnNext.innerText = "Next →";
+            }
+
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function nextSlide() {
+            if (currentIndex < timelineData.length - 1) {
+                currentIndex++;
+                updateSlide();
+            } else {
+                screenTimeline.classList.remove('active');
+                screenLetter.classList.add('active');
+            }
+        }
+
+        function prevSlide() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateSlide();
+            }
+        }
+
+        // --- ENVELOPE LOGIC ---
+        function openEnvelope() {
+            // Trigger animation
+            envWrapper.classList.add('open');
+
+            // Wait 1.6 seconds for the user to watch the animation, then show letter
+            setTimeout(() => {
+                envArea.style.display = 'none';
+                fullLetter.style.display = 'block';
+
+                // Slight delay to allow CSS to register 'block' before changing opacity
+                setTimeout(() => {
+                    fullLetter.style.opacity = 1;
+                    createHearts(); // Trigger hearts when letter appears
+                }, 50);
+            }, 1600);
+        }
+
+        function restartTimeline() {
+            screenLetter.classList.remove('active');
+
+            document.querySelectorAll('.heart').forEach(heart => heart.remove());
+
+            // Reset Envelope State
+            envWrapper.classList.remove('open');
+            envArea.style.display = 'flex';
+            fullLetter.style.display = 'none';
+            fullLetter.style.opacity = 0;
+
+            currentIndex = 0;
+            updateSlide();
+
+            screenWelcome.classList.add('active');
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.classList.add('heart');
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                    document.body.appendChild(heart);
+                    setTimeout(() => heart.remove(), 5000);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+
+</html>
