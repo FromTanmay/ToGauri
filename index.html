@@ -111,6 +111,21 @@
             color: white;
         }
 
+        /* --- PIN INPUT STYLES --- */
+        #pin-input {
+            padding: 12px;
+            border-radius: 30px;
+            border: 2px solid #d6336c;
+            outline: none;
+            text-align: center;
+            font-size: 1.2rem;
+            font-family: 'Poppins', sans-serif;
+            width: 60%;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.7);
+            letter-spacing: 5px;
+        }
+
         .photo-container {
             width: 100%;
             height: 300px;
@@ -219,7 +234,6 @@
             width: 100%;
             height: 100%;
             background-color: #f48fb1;
-            /* Outer envelope color */
             border-radius: 5px;
             box-shadow: 0 10px 20px rgba(214, 51, 108, 0.2);
         }
@@ -239,7 +253,6 @@
             font-family: 'Playfair Display', serif;
             font-size: 1.2rem;
             transition: transform 0.8s ease 0.4s;
-            /* Waits for flap, then slides up */
             z-index: 1;
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
         }
@@ -251,7 +264,6 @@
             z-index: 2;
         }
 
-        /* The folded front triangles of the envelope */
         .env-front::before {
             content: '';
             position: absolute;
@@ -283,7 +295,6 @@
             border-left: 130px solid transparent;
             border-right: 130px solid transparent;
             border-top: 95px solid #f06292;
-            /* Top flap color */
             transform-origin: top;
             transition: transform 0.6s ease, z-index 0.2s;
             z-index: 3;
@@ -308,7 +319,6 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Classes applied via JS when clicked */
         .envelope-wrapper.open .env-flap {
             transform: rotateX(180deg);
             z-index: 0;
@@ -379,7 +389,16 @@
 
     <div class="glass-card">
 
-        <div id="screen-welcome" class="screen active">
+        <div id="screen-pin" class="screen active">
+            <h1>Secret Delivery 💌</h1>
+            <p class="subtitle">Please enter the PIN to unlock</p>
+            <input type="password" id="pin-input" placeholder="•••••" maxlength="5">
+            <p id="pin-error" style="color: #c2185b; font-size: 0.9rem; display: none; margin-top: 5px;">Incorrect PIN. Try again!</p>
+            <br>
+            <button onclick="checkPin()" style="margin-top: 15px;">Unlock</button>
+        </div>
+
+        <div id="screen-welcome" class="screen">
             <h1>Happy 18th, Khushi! ❤️</h1>
             <p class="subtitle">A walk down memory lane.</p>
             <button onclick="startTimeline()">Start the Journey</button>
@@ -460,8 +479,6 @@
             { img: "photo11.jpg", date: "NOW", caption: "We made it till here, Happy 18th Birthday! ❤️💕" }
         ];
 
-        // 1. PRELOAD IMAGES: This downloads all images in the background immediately
-        // so they are ready instantly when she clicks "Next"
         window.addEventListener('DOMContentLoaded', () => {
             timelineData.forEach(item => {
                 const img = new Image();
@@ -471,6 +488,7 @@
 
         let currentIndex = 0;
 
+        const screenPin = document.getElementById('screen-pin');
         const screenWelcome = document.getElementById('screen-welcome');
         const screenTimeline = document.getElementById('screen-timeline');
         const screenLetter = document.getElementById('screen-letter');
@@ -485,6 +503,29 @@
         const envWrapper = document.getElementById('env-wrapper');
         const envArea = document.getElementById('envelope-area');
         const fullLetter = document.getElementById('full-letter-container');
+
+        // Allow pressing 'Enter' on the pin input field to trigger the unlock
+        document.getElementById("pin-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                checkPin();
+            }
+        });
+
+        function checkPin() {
+            const pinInput = document.getElementById('pin-input').value;
+            const pinError = document.getElementById('pin-error');
+            
+            if (pinInput === "83299") {
+                // Pin is correct: transition to welcome screen
+                screenPin.classList.remove('active');
+                screenWelcome.classList.add('active');
+            } else {
+                // Pin is incorrect: show error and clear input
+                pinError.style.display = 'block';
+                document.getElementById('pin-input').value = '';
+            }
+        }
 
         timelineData.forEach((_, index) => {
             const dot = document.createElement('div');
@@ -502,20 +543,16 @@
         function updateSlide() {
             const data = timelineData[currentIndex];
 
-            // Fade out current image
             imgEl.style.opacity = 0;
 
-            // Wait a moment for the fade-out effect, then change the image
             setTimeout(() => {
                 dateEl.innerText = data.date;
                 captionEl.innerText = data.caption;
 
-                // 2. WAIT TO FADE IN: Only show the image ONCE it is fully loaded
                 imgEl.onload = () => {
                     imgEl.style.opacity = 1;
                 };
 
-                // Changing the src triggers the download/onload event
                 imgEl.src = data.img;
 
             }, 300);
@@ -550,7 +587,6 @@
             }
         }
 
-        // --- ENVELOPE LOGIC ---
         function openEnvelope() {
             envWrapper.classList.add('open');
 
@@ -567,7 +603,6 @@
 
         function restartTimeline() {
             screenLetter.classList.remove('active');
-
             document.querySelectorAll('.heart').forEach(heart => heart.remove());
 
             envWrapper.classList.remove('open');
